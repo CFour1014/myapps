@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏮 幸運大輪盤矩陣</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#fef2f2] text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-white border-4 border-red-600 rounded-3xl p-6 max-w-sm w-full text-center shadow-[8px_8px_0px_#dc2626] relative">
+            
+            <a href="../index.html" class="absolute top-4 left-4 text-xs font-bold text-red-600 hover:underline">← 返回</a>
+
+            <div class="text-xs font-bold tracking-widest text-red-600 bg-red-100 inline-block px-3 py-1 rounded-full mb-2">🏮 御神籤</div>
+            <h1 class="text-2xl font-black text-slate-900 tracking-wide mb-6">幸運大輪盤</h1>
+
+            <div class="w-48 h-48 mx-auto bg-amber-400 border-4 border-slate-900 rounded-full flex items-center justify-center relative overflow-hidden mb-6 shadow-inner">
+                <div class="absolute top-0 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[20px] border-t-red-600 z-10"></div>
+                <div id="wheel" class="w-full h-full flex items-center justify-center text-4xl font-black transition-transform duration-[3s] ease-out">
+                    🔮
+                </div>
+            </div>
+
+            <div id="wheel-result" class="text-lg font-black text-red-600 h-8 mb-4">
+                試試今天的運氣！
+            </div>
+
+            <button onclick="spinWheel()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-3.5 rounded-xl border-2 border-slate-900 shadow-[4px_4px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all">
+                拉動搖桿 SPIN！
+            </button>
+        </div>
+    </main>
+
+    <footer class="text-center py-4 text-xs text-red-800/60 font-bold">🏮 大吉大利 · 萬事如意</footer>
+
+    <script>
+        const prizes = ['大吉 🌟', '中吉 ✨', '小吉 🌱', '末吉 🍂', '大吉 🌟', '許願成功 🎋'];
+        let currentRotation = 0;
+
+        function spinWheel() {
+            const wheel = document.getElementById('wheel');
+            const resultDisplay = document.getElementById('wheel-result');
+            
+            resultDisplay.innerText = '命運旋轉中...';
+
+            // 隨機增加旋轉角度（至少轉 4 圈 + 隨機角度）
+            const extraDegree = Math.floor(Math.random() * 360);
+            currentRotation += 1440 + extraDegree;
+            
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            // 3秒後動畫結束，結算結果
+            setTimeout(() => {
+                const prize = prizes[Math.floor(Math.random() * prizes.length)];
+                resultDisplay.innerText = `恭喜獲得：${prize}`;
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

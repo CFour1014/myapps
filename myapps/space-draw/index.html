@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪐 星際隨機抽籤終端</title>
+    <style>
+        /* 核心科技感黑藍色背景 */
+        body {
+            background-color: #050b14;
+            color: #cffafe;
+            font-family: monospace;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* 儀表板外框 */
+        .panel {
+            background-color: rgba(11, 25, 44, 0.9);
+            border: 2px solid rgba(6, 182, 212, 0.4);
+            border-radius: 24px;
+            padding: 32px 24px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* 返回按鈕 */
+        .back-link {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            font-size: 12px;
+            color: #06b6d4;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .back-link:hover {
+            color: #67e8f9;
+        }
+
+        /* 標題 */
+        h1 {
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #22d3ee;
+            margin-top: 24px;
+            margin-bottom: 0;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+        }
+
+        /* 能量核心區域 */
+        .container {
+            margin: 40px 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 192px;
+        }
+
+        /* 旋轉軌道 */
+        .orbit {
+            position: absolute;
+            width: 176px;
+            height: 176px;
+            border: 1px dashed rgba(6, 182, 212, 0.4);
+            border-radius: 50%;
+            animation: spin 4s linear infinite;
+        }
+
+        /* 核心能量球 */
+        .core-sphere {
+            width: 128px;
+            height: 128px;
+            background: linear-gradient(135deg, #022329, #0f172a);
+            border: 2px solid #22d3ee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+        }
+
+        #result-display {
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #ffffff;
+        }
+
+        /* 輸入框區塊 */
+        .input-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: #06b6d4;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            background-color: #030712;
+            border: 1px solid #0891b2;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 14px;
+            color: #a5f3fc;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+        input:focus {
+            border-color: #22d3ee;
+        }
+
+        /* 啟動按鈕 */
+        .launch-btn {
+            width: 100%;
+            background-color: #06b6d4;
+            color: #050b14;
+            font-weight: 900;
+            letter-spacing: 2px;
+            font-size: 14px;
+            padding: 14px 0;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3);
+            font-family: monospace;
+        }
+        .launch-btn:hover {
+            background-color: #22d3ee;
+        }
+        .launch-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 頁尾 */
+        footer {
+            text-align: center;
+            padding: 16px 0;
+            font-size: 12px;
+            color: #0891b2;
+            opacity: 0.5;
+        }
+
+        /* 動態旋轉動畫 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <div class="panel">
+            <a href="../index.html" class="back-link">← RETURN</a>
+
+            <h1>🪐 Space Draw // 星際抽籤</h1>
+
+            <div class="container">
+                <div class="orbit"></div>
+                <div id="core" class="core-sphere">
+                    <span id="result-display">READY</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>輸入抽籤名單 (用逗號隔開)：</label>
+                <input type="text" id="pool-input" value="午餐吃麵, 吃麥當勞, 吃便當, 吃壽司, 喝珍奶">
+            </div>
+
+            <button onclick="startDraw()" class="launch-btn">LAUNCH // 啟動抽取</button>
+        </div>
+    </main>
+
+    <footer>SPACE_DRAW_MODULE // v2.0</footer>
+
+    <script>
+        function startDraw() {
+            const input = document.getElementById('pool-input').value;
+            const items = input.split(/[,，\s]+/).filter(item => item.trim() !== '');
+            const display = document.getElementById('result-display');
+            const core = document.getElementById('core');
+
+            if (items.length === 0) {
+                alert('ERR: 名單不可為空！');
+                return;
+            }
+
+            let counter = 0;
+            core.style.borderColor = '#f43f5e'; 
+            core.style.boxShadow = '0 0 30px rgba(244,63,94,0.6)';
+
+            const interval = setInterval(() => {
+                const randomItem = items[Math.floor(Math.random() * items.length)];
+                display.innerText = randomItem;
+                counter++;
+
+                if (counter > 15) {
+                    clearInterval(interval);
+                    const finalResult = items[Math.floor(Math.random() * items.length)];
+                    display.innerText = `👉 ${finalResult}`;
+                    core.style.borderColor = '#22d3ee'; 
+                    core.style.boxShadow = '0 0 25px rgba(34,211,238,0.5)';
+                }
+            }, 80);
+        }
+    </script>
+</body>
+</html>

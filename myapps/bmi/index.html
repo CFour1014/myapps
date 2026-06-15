@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ BMI 健康解碼矩陣</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen flex flex-col justify-between font-sans">
+
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-slate-900/60 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-800 max-w-md w-full p-6 md:p-8 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+
+            <a href="../index.html" class="inline-flex items-center text-xs font-mono tracking-widest text-slate-500 hover:text-cyan-400 mb-6 transition-colors uppercase">
+                <span class="mr-1">←</span> BACK TO HOST // 返回總覽
+            </a>
+
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-black tracking-wider text-white flex items-center justify-center gap-2 drop-shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+                    <span>⚡</span> BMI 生理數據分析儀
+                </h1>
+                <p class="text-slate-500 text-xs font-mono mt-1">[SYSTEM: READY FOR SCANNING]</p>
+            </div>
+
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-mono tracking-widest text-slate-400 uppercase mb-1.5" for="height">HEIGHT // 身高 (公分 cm)</label>
+                    <input type="number" id="height" placeholder="EX: 175" 
+                           class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 font-mono transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono tracking-widest text-slate-400 uppercase mb-1.5" for="weight">WEIGHT // 體重 (公斤 kg)</label>
+                    <input type="number" id="weight" placeholder="EX: 65" 
+                           class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 font-mono transition">
+                </div>
+
+                <button onclick="calculateBMI()" 
+                        class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold tracking-widest text-sm py-3.5 rounded-xl transition duration-200 shadow-lg shadow-cyan-950/50 uppercase">
+                    執行生理診斷 RUN
+                </button>
+            </div>
+
+            <div id="resultBox" class="mt-8 pt-6 border-t border-slate-800 hidden text-center">
+                <p class="text-slate-500 text-xs font-mono tracking-widest uppercase">DIAGNOSIS RESULT // 診斷結果</p>
+                <div id="bmiValue" class="text-5xl font-black text-cyan-400 my-3 drop-shadow-[0_0_10px_rgba(34,211,238,0.4)]">22.5</div>
+                <div id="bmiStatus" class="inline-block px-4 py-1 rounded-full text-xs font-bold tracking-wider bg-slate-950 text-slate-300 border border-slate-800 mb-4">
+                    體重正常
+                </div>
+                <p id="bmiAdvice" class="text-slate-400 text-sm leading-relaxed bg-slate-950/80 p-3.5 rounded-xl border border-slate-800/80 font-mono text-left">
+                    -
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="text-center py-4 text-xs font-mono text-slate-700 border-t border-slate-950">
+        BIOMETRIC_MATRIX // TOOL_01
+    </footer>
+
+    <script>
+        function calculateBMI() {
+            const heightInput = document.getElementById('height').value;
+            const weightInput = document.getElementById('weight').value;
+            const resultBox = document.getElementById('resultBox');
+            const bmiValueEl = document.getElementById('bmiValue');
+            const bmiStatusEl = document.getElementById('bmiStatus');
+            const bmiAdviceEl = document.getElementById('bmiAdvice');
+
+            if (!heightInput || !weightInput || heightInput <= 0 || weightInput <= 0) {
+                alert('CRITICAL ERROR: 請輸入正確的身高與體重數據！');
+                return;
+            }
+
+            const heightInMeters = heightInput / 100;
+            const bmi = (weightInput / (heightInMeters * heightInMeters)).toFixed(1);
+
+            resultBox.classList.remove('hidden');
+            bmiValueEl.innerText = bmi;
+
+            let status = '';
+            let advice = '';
+            let colorClasses = []; 
+
+            if (bmi < 18.5) {
+                status = 'STATUS: UNDERWEIGHT // 體重過輕 ⚠️';
+                advice = '> [警告] 偵測到體重低於標準矩陣。建議調高高優質蛋白質與營養攝取，並啟動增肌阻力訓練協定。';
+                colorClasses = ['border-amber-500/40', 'text-amber-400', 'drop-shadow-[0_0_10px_rgba(245,158,11,0.4)]'];
+            } else if (bmi >= 18.5 && bmi < 24) {
+                status = 'STATUS: OPTIMAL // 體重正常 ✨';
+                advice = '> [正常] 生理數據處於完美平衡狀態。請維持當前碳水與蛋白質比率，保持系統最佳運作。';
+                colorClasses = ['border-emerald-500/40', 'text-emerald-400', 'drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]'];
+            } else if (bmi >= 24 && bmi < 27) {
+                status = 'STATUS: OVERWEIGHT // 體重過重 😮';
+                advice = '> [提醒] 數據略微溢出標準。建議減少精緻高糖攝取，每週排定 150 分鐘有氧燃脂心率協定。';
+                colorClasses = ['border-orange-500/40', 'text-orange-400', 'drop-shadow-[0_0_10px_rgba(249,115,22,0.4)]'];
+            } else {
+                status = 'STATUS: CRITICAL // 肥胖 🚨';
+                advice = '> [嚴重警告] 脂肪矩陣嚴重超載。為了系統硬體安全，強烈建議諮詢醫療與專業營養師進行核心體態修正。';
+                colorClasses = ['border-red-500/40', 'text-red-400', 'drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]'];
+            }
+
+            bmiStatusEl.className = `inline-block px-4 py-1 rounded-full text-xs font-bold tracking-wider bg-slate-950 mb-4 border ${colorClasses[0]} ${colorClasses[1]}`;
+            bmiStatusEl.innerText = status;
+            bmiValueEl.className = `text-5xl font-black my-3 ${colorClasses[1]} ${colorClasses[2]}`;
+            bmiAdviceEl.innerText = advice;
+        }
+    </script>
+</body>
+</html>
